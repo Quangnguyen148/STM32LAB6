@@ -50,16 +50,18 @@ void command_parser_fsm(){
 	case CM_T:
 		if (buffer[index_buffer-1] == '#'){
 			HAL_UART_Transmit(&huart2, &buffer[index_buffer-1], 1, 50);
-			cmd_status = CM_RST_FINISHED;
+			HAL_UART_Transmit(&huart2, (void *) str, sprintf(str, "\r\n"), 1000);
+			cmd_flag = RST;
+			cmd_status = CM_INIT;
 		}
 		else cmd_status = CM_INIT;
 		break;
-
-	case CM_RST_FINISHED:
-		HAL_UART_Transmit(&huart2, (void *) str, sprintf(str, "\r\n"), 1000);
-		cmd_flag = RST;
-		cmd_status = CM_INIT;
-		break;
+//
+//	case CM_RST_FINISHED:
+//		HAL_UART_Transmit(&huart2, (void *) str, sprintf(str, "\r\n"), 1000);
+//		cmd_flag = RST;
+//		cmd_status = CM_INIT;
+//		break;
 
 	case CM_O:
 		if (buffer[index_buffer-1] == 'K'){
@@ -72,15 +74,17 @@ void command_parser_fsm(){
 	case CM_K:
 		if (buffer[index_buffer-1] == '#'){
 			HAL_UART_Transmit(&huart2, &buffer[index_buffer-1], 1, 50);
-			cmd_status = CM_OK_FINISHED;
+			HAL_UART_Transmit(&huart2, (void *) str, sprintf(str, "\r\n"), 1000);
+			cmd_flag = OK;
+			cmd_status = CM_INIT;
 		}
 		else cmd_status = CM_INIT;
 		break;
 
-	case CM_OK_FINISHED:
-		HAL_UART_Transmit(&huart2, (void *) str, sprintf(str, "\r\n"), 1000);
-		cmd_flag = OK;
-		cmd_status = CM_INIT;
-		break;
+//	case CM_OK_FINISHED:
+//		HAL_UART_Transmit(&huart2, (void *) str, sprintf(str, "\r\n"), 1000);
+//		cmd_flag = OK;
+//		cmd_status = CM_INIT;
+//		break;
 	}
 }
